@@ -7,6 +7,8 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.mapbox.mapboxsdk.annotations.MarkerOptions;
+import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
@@ -36,28 +38,39 @@ public class MainActivity extends AppCompatActivity {
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
-            public void onMapReady(MapboxMap mapboxMap) {
+            public void onMapReady(final MapboxMap mapboxMap) {
 
                 // Customize map with markers, polylines, etc.
+                AirPollutionRestClient.get("all/public/devices", null, new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        // If the response is JSONObject instead of expected JSONArray
+                        Log.d(TAG, "JSON Object not desired");
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                        // Pull out the first event on the public timeline
+                        Log.d(TAG, "Success API Call");
+                        ArrayList<AirPollutionData> airPollutionDatas = parseAirPollutionData(response);
+                        addAirPollutionDataToMap(airPollutionDatas,mapboxMap);
+                        Log.d(TAG, airPollutionDatas.get(0).getAqi().toString());
+
+                    }
+                });
             }
         });
-        AirPollutionRestClient.get("all/public/devices", null, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                // If the response is JSONObject instead of expected JSONArray
-                Log.d(TAG,"JSON Object not desired");
-            }
 
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                // Pull out the first event on the public timeline
-                Log.d(TAG,"Success API Call");
-                ArrayList<AirPollutionData> airPollutionDatas = parseAirPollutionData(response);
-                Log.d(TAG,airPollutionDatas.get(0).getAqi().toString());
+    }
 
-                // Do something with the response
-            }
-        });
+    private void addAirPollutionDataToMap(ArrayList<AirPollutionData> airPollutionDatas, MapboxMap mapboxMap) {
+        for(int i=0;i<airPollutionDatas.size();i++){
+            AirPollutionData deviceData = airPollutionDatas.get(i);
+            mapboxMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(deviceData.getLatitude(), deviceData.getLongitude()))
+                    .title(deviceData.getLabel())
+                    .snippet("AQI: " + deviceData.getAqi().toString()));
+        }
     }
 
     private ArrayList<AirPollutionData> parseAirPollutionData(JSONArray response) {
