@@ -30,4 +30,8 @@ dependencies {
     compile ('com.mapbox.mapboxsdk:mapbox-android-sdk:4.0.1@aar'){
         transitive=true
     }
+    provided 'org.glassfish:javax.annotation:10.0-b28'
+    compile 'com.google.code.gson:gson:2.6.2'
+    compile 'com.loopj.android:android-async-http:1.4.9'
+
 }
