@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         mapbox:access_token="pk.eyJ1Ijoib21wYXRlbCIsImEiOiJjaW9hdzExcDkwM25pdndsem5qMjAyZTUxIn0.1Vdt2kNs1qDO5e4jS59v1A"
-        mapbox:style_url="mapbox://styles/ompatel/cioaw4hu9007jvemc7c2g2zhk"
+        mapbox:style_url="mapbox://styles/mapbox/streets-v9"
         mapbox:center_latitude="28.6139"
         mapbox:center_longitude="77.2090"
         mapbox:zoom="9"/>
