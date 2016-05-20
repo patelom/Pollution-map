@@ -8,6 +8,12 @@ Android Application to see the Air Quality Index of various regions of Delhi on 
 ### Version
 0.0.1
 
+### Screenshot
+
+
+![ScreenShot](https://github.com/patelom/Pollution-map/blob/master/screenshot/rsz_screenshot_1.png?raw=true)
+![ScreenShot](https://github.com/patelom/Pollution-map/blob/master/screenshot/rsz_screenshot_2.png?raw=true)
+
 ### Tech
 
 Pollution Map uses  Open Source APIs and Technology
